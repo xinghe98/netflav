@@ -22,7 +22,6 @@ class netflixPipeline(object):
 
     def process_item(self, item, spider):
         # print(item)
-        print(self.flag)
         if self.flag < 10:
             dirname = '810{}'.format(self.flag)
         else:
@@ -32,8 +31,9 @@ class netflixPipeline(object):
         item['img_name'] = dirname
         item['foldername'] = self.foldername
         # 根据文件数量，创建文件夹
-        if self.flag % self.folder == 0:
-            item['foldername'] = self.mktimedir()
+        if (self.flag-2) % self.folder == 0:
+            self.foldername = self.mktimedir()
+            item['foldername'] = self.foldername
         # 将视频文件名设置为 -81xx-.mp4格式
         rstr = r"[\/\\\:\*\?\"\<\>\|]"  # '/ \ : * ? " < > |'
         video_name = re.sub(rstr, "_", item['title'])  # 替换为下划线

@@ -1,5 +1,4 @@
 import scrapy
-import time
 import json
 from netflav.items import NetflavItem
 import re
@@ -19,8 +18,7 @@ class NetflspiderSpider(scrapy.Spider):
             # 从视频链接中获取视频信息
             yield scrapy.Request(video_url, callback=self.parse_video)
 
-        for i in range(2, 4):
-            time.sleep(1)
+        for i in range(2, 5):
             url = self.start_urls[0] + '?page={}'.format(str(i))
             yield scrapy.Request(url=url, callback=self.parse)
 
@@ -37,9 +35,10 @@ class NetflspiderSpider(scrapy.Spider):
         src_video = data['props']['initialState']['video']['data']['srcs']
         # 从列表内取出含有字符串‘streamtape.to/e‘的元素,即ST的播放源
         video_ST = [i for i in src_video if 'streamtape.to/e' in i][0]
-        yield scrapy.Request(video_ST,
-                             callback=self.parse_url,
-                             meta={'title': title, 'cover': cover})
+        if video_ST is not None and video_ST != '':
+            yield scrapy.Request(video_ST,
+                                 callback=self.parse_url,
+                                 meta={'title': title, 'cover': cover})
 
     # 获取视频播放链接
     def parse_url(self, response):
