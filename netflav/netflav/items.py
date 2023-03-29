@@ -11,3 +11,6 @@ class NetflavItem(scrapy.Item):
     title = scrapy.Field()
     cover = scrapy.Field()
     video_url = scrapy.Field()
+    img_name = scrapy.Field()
+    video_name = scrapy.Field()
+    foldername = scrapy.Field()

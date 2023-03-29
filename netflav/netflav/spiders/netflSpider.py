@@ -1,4 +1,5 @@
 import scrapy
+import time
 import json
 from netflav.items import NetflavItem
 import re
@@ -17,6 +18,11 @@ class NetflspiderSpider(scrapy.Spider):
             video_url = 'https://netflav.com'+uri
             # 从视频链接中获取视频信息
             yield scrapy.Request(video_url, callback=self.parse_video)
+
+        for i in range(2, 4):
+            time.sleep(1)
+            url = self.start_urls[0] + '?page={}'.format(str(i))
+            yield scrapy.Request(url=url, callback=self.parse)
 
     # 获取视频部分信息
     def parse_video(self, response):

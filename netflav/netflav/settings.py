@@ -8,8 +8,8 @@
 #     https://docs.scrapy.org/en/latest/topics/spider-middleware.html
 
 BOT_NAME = "netflav"
-LOG_LEVEL = 'WARNING'
-# LOG_LEVEL = 'DEBUG'
+# LOG_LEVEL = 'WARNING'
+LOG_LEVEL = 'DEBUG'
 SPIDER_MODULES = ["netflav.spiders"]
 NEWSPIDER_MODULE = "netflav.spiders"
 
@@ -51,9 +51,8 @@ SPIDER_MIDDLEWARES = {
 
 # Enable or disable downloader middlewares
 # See https://docs.scrapy.org/en/latest/topics/downloader-middleware.html
-# DOWNLOADER_MIDDLEWARES = {
-#    "netflav.middlewares.NetflavDownloaderMiddleware": 543,
-# }
+DOWNLOADER_MIDDLEWARES = {
+}
 
 # Enable or disable extensions
 # See https://docs.scrapy.org/en/latest/topics/extensions.html
@@ -65,8 +64,12 @@ SPIDER_MIDDLEWARES = {
 # See https://docs.scrapy.org/en/latest/topics/item-pipeline.html
 ITEM_PIPELINES = {
     "netflav.pipelines.netflixPipeline": 300,
+    "netflav.pipelines.netflixImagesPipeline": 301,
+    # "netflav.pipelines.netflVideoPipeline": 302
 }
 
+IMAGES_STORE = './content'
+MEDIA_ALLOW_REDIRECTS = True
 # Enable and configure the AutoThrottle extension (disabled by default)
 # See https://docs.scrapy.org/en/latest/topics/autothrottle.html
 #AUTOTHROTTLE_ENABLED = True
@@ -98,3 +101,4 @@ CONCURRENT_REQUESTS = 16  # 并发数
 DOWNLOAD_TIMEOUT = 180  # 超时时间
 RETRY_HTTP_CODES = [500, 503, 504, 400, 403, 404, 408, 403]
 TWISTED_REACTOR = 'twisted.internet.asyncioreactor.AsyncioSelectorReactor'
+DOWNLOAD_MAXSIZE = 0
