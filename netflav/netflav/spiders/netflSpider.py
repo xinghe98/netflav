@@ -27,6 +27,8 @@ class NetflspiderSpider(scrapy.Spider):
         data = response.xpath(
             '//script').re(r'<script id="__NEXT_DATA__" type="application/json">(.*)</script>')[0]
         data = json.loads(data)
+        # 获取视频id
+        id = data['props']['initialState']['video']['data']['videoId']
         # 获取视频标题
         title = data['props']['initialState']['video']['data']['description']
         # 获取视频封面
@@ -34,11 +36,15 @@ class NetflspiderSpider(scrapy.Spider):
         # 获取所有可播放的源
         src_video = data['props']['initialState']['video']['data']['srcs']
         # 从列表内取出含有字符串‘streamtape.to/e‘的元素,即ST的播放源
-        video_ST = [i for i in src_video if 'streamtape.to/e' in i][0]
-        if video_ST is not None and video_ST != '':
-            yield scrapy.Request(video_ST,
-                                 callback=self.parse_url,
-                                 meta={'title': title, 'cover': cover})
+        try:
+            video_ST = [i for i in src_video if 'streamtape.to/e' in i][0]
+            if video_ST is not None and video_ST != '':
+                yield scrapy.Request(video_ST,
+                                     callback=self.parse_url,
+                                     meta={'title': title, 'cover': cover,
+                                           'id': id})
+        except IndexError:
+            print('ST视频链接获取失败')
 
     # 获取视频播放链接
     def parse_url(self, response):
@@ -58,6 +64,7 @@ class NetflspiderSpider(scrapy.Spider):
         # 获取视频播放链接
         item = NetflavItem()
         item['title'] = response.meta['title']
+        item['id'] = response.meta['id']
         item['cover'] = response.meta['cover']
         item['video_url'] = 'https:/' + video_url
         yield item
