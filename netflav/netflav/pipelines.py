@@ -47,7 +47,7 @@ class netflixPipeline(object):
 
 class netflixImagesPipeline(ImagesPipeline):
     def get_media_requests(self, item, info):
-        if item['download']:
+        if item['download'] == 1:
             yield scrapy.Request(item['cover'])
         else:
             return item
@@ -65,7 +65,7 @@ class netflVideoPipeline(object):
 
     def process_item(self, item, spider):
         # print(item)
-        if item['download']:
+        if item['download'] == 1:
             download(item['video_url'], "./content/" +
                      item['foldername']+'/' + item['video_name']+'.mp4')
         return item
@@ -94,10 +94,10 @@ class MySQLPipeline(object):
             sql = 'INSERT INTO infoid (id) VALUES ("%s")' % (item['id'])
             self.cursor.execute(sql)
             self.conn.commit()
-            item['download'] = True
+            item['download'] = 1
         if len(result) != 0:
-            item['download'] = False
-            return item
+            item['download'] = 0
+        return item
 
     def close_spider(self, spider):
         self.conn.close()

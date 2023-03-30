@@ -64,9 +64,9 @@ DOWNLOADER_MIDDLEWARES = {
 # See https://docs.scrapy.org/en/latest/topics/item-pipeline.html
 ITEM_PIPELINES = {
     "netflav.pipelines.netflixPipeline": 300,
-    "netflav.pipelines.MySQLPipeline": 301,
-    "netflav.pipelines.netflixImagesPipeline": 302,
-    "netflav.pipelines.netflVideoPipeline": 303
+    "netflav.pipelines.MySQLPipeline": 401,
+    "netflav.pipelines.netflixImagesPipeline": 502,
+    "netflav.pipelines.netflVideoPipeline": 603
 }
 
 IMAGES_STORE = './content'
