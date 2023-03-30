@@ -8,8 +8,8 @@
 #     https://docs.scrapy.org/en/latest/topics/spider-middleware.html
 
 BOT_NAME = "netflav"
-# LOG_LEVEL = 'WARNING'
-LOG_LEVEL = 'DEBUG'
+LOG_LEVEL = 'WARNING'
+# LOG_LEVEL = 'DEBUG'
 SPIDER_MODULES = ["netflav.spiders"]
 NEWSPIDER_MODULE = "netflav.spiders"
 
@@ -65,7 +65,7 @@ DOWNLOADER_MIDDLEWARES = {
 ITEM_PIPELINES = {
     "netflav.pipelines.netflixPipeline": 300,
     "netflav.pipelines.netflixImagesPipeline": 301,
-    # "netflav.pipelines.netflVideoPipeline": 302
+    "netflav.pipelines.netflVideoPipeline": 302
 }
 
 IMAGES_STORE = './content'
@@ -97,11 +97,11 @@ TWISTED_REACTOR = "twisted.internet.asyncioreactor.AsyncioSelectorReactor"
 FEED_EXPORT_ENCODING = "utf-8"
 RETRY_ENABLED = True
 RETRY_TIMES = 10  # 重试次数
-CONCURRENT_REQUESTS = 16  # 并发数
+CONCURRENT_REQUESTS = 8  # 并发数
 DOWNLOAD_TIMEOUT = 180  # 超时时间
 RETRY_HTTP_CODES = [500, 503, 504, 400, 403, 404, 408, 403]
 # DOWNLOAD_MAXSIZE = 0
 AUTOTHROTTLE_ENABLED = True
 AUTOTHROTTLE_START_DELAY = 5
-AUTOTHROTTLE_MAX_DELAY = 20
-AUTOTHROTTLE_TARGET_CONCURRENCY = 0.8
+AUTOTHROTTLE_MAX_DELAY = 70
+AUTOTHROTTLE_TARGET_CONCURRENCY = 0.5

@@ -5,13 +5,15 @@ from tqdm import tqdm
 import requests
 # 用于多线程操作
 import multitasking
+import threading
 from retry import retry
 import signal
 # 导入 retry 库以方便进行下载出错重试
 signal.signal(signal.SIGINT, multitasking.killall)
 # 根据cpu决定线程数
-multitasking.set_max_threads(6)
+multitasking.set_max_threads(8)
 
+lock = threading.RLock()
 # 请求头
 headers = {
     'User-Agent': 'Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/63.0.3239.132 Safari/537.36 QIHU 360SE'
@@ -95,10 +97,12 @@ def download(url: str, file_name: str, retry_times: int = 3, each_size=16*MB) ->
             chunks.append(chunk)
             # 更新进度条
             bar.update(chunk_size)
+        lock.acquire()
         f.seek(start)
         for chunk in chunks:
             f.write(chunk)
         # 释放已写入的资源
+        lock.release()
         del chunks
 
     session = requests.Session()
@@ -109,7 +113,7 @@ def download(url: str, file_name: str, retry_times: int = 3, each_size=16*MB) ->
     parts = split(0, file_size, each_size)
     # print(f'分块数：{len(parts)}')
     # 创建进度条
-    bar = tqdm(total=file_size, desc=f'下载文件: {file_name}')
+    bar = tqdm(total=file_size, desc=f'{file_name}')
     for part in parts:
         start, end = part
         start_download(start, end)
