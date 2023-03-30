@@ -50,7 +50,7 @@ class netflixImagesPipeline(ImagesPipeline):
     def file_path(self, request, response=None, info=None, *, item=None):
         # 将文件名设置为 81xx.jpg 格式
         filename = item['foldername']+'/' + item['img_name'] + '.jpg'
-        # print('正在下载'+filename)
+        print('正在下载'+filename)
         return filename
 
     def item_completed(self, results, item, info):
