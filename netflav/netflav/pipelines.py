@@ -26,9 +26,9 @@ class netflixPipeline(object):
     def process_item(self, item, spider):
         # print(item)
         if self.flag < 10:
-            dirname = '810{}'.format(self.flag)
+            dirname = '{}0{}'.format(utils.prefix, self.flag)
         else:
-            dirname = '81{}'.format(self.flag)
+            dirname = '{}{}'.format(utils.prefix, self.flag)
         self.flag += 1
         # 将文件名设置为 81xx.jpg 格式
         item['img_name'] = dirname
@@ -52,7 +52,7 @@ class netflixImagesPipeline(ImagesPipeline):
         if db.isExit(item['id']):
             yield scrapy.Request(item['cover'])
         else:
-            print("该内容已经下载过")
+            print("该内容已经下载过"+item['id'])
             return item
 
     def file_path(self, request, response=None, info=None, *, item=None):
