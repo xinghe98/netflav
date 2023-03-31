@@ -6,3 +6,6 @@ db = 'netflav'  # 数据库名称
 dir = './content'  # 文件储存位置 默认是 redme文件同级的content
 table = 'infoid'  # 数据库内表名称
 field = 'id'  # 默认为id
+start_page = 2  # 起始页
+end_page = 5  # 结束页
+start_url = 'https://netflav.com/uncensored'

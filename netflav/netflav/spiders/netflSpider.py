@@ -2,13 +2,13 @@ import scrapy
 import json
 from netflav.items import NetflavItem
 import re
-import sys
+from netflav.utils import utils
 
 
 class NetflspiderSpider(scrapy.Spider):
     name = "netflSpider"
     allowed_domains = ["netflav.com", "streamtape.to"]
-    start_urls = ["https://netflav.com/uncensored"]
+    start_urls = [utils.start_url]
 
     # 获取视频列表页的所有视频链接
     def parse(self, response):
@@ -21,7 +21,7 @@ class NetflspiderSpider(scrapy.Spider):
             # 从视频链接中获取视频信息
             yield scrapy.Request(video_url, callback=self.parse_video)
 
-        for i in range(2, 5):
+        for i in range(utils.start_page, utils.end_page + 1):
             url = self.start_urls[0] + '?page={}'.format(str(i))
             yield scrapy.Request(url=url, callback=self.parse)
 

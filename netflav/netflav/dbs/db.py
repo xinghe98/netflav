@@ -9,7 +9,7 @@ class sqldb(object):
         self.mysql_password = utils.passwd
         self.mysql_db = utils.db
         self.mysql_port = utils.port
-        self.mysql_db_charset = 'utf8'
+        self.mysql_db_charset = 'utf8mb4'
         self.connect()
 
     def connect(self):
@@ -17,7 +17,12 @@ class sqldb(object):
                                     port=self.mysql_port,
                                     password=self.mysql_password,
                                     db=self.mysql_db,
-                                    charset=self.mysql_db_charset)
+                                    charset=self.mysql_db_charset,
+                                    cursorclass=pymysql.cursors.DictCursor)
+        self.conn.cursor().execute('CREATE DATABASE IF NOT EXISTS %s;' % self.mysql_db)
+        self.conn.cursor().execute(
+            'create table if not exists %s(id int auto_increment primary key not null, %s varchar(20));' % (utils.table, utils.field))
+        self.conn.select_db(self.mysql_db)
         self.cursor = self.conn.cursor()
 
     def isExit(self, id) -> bool:
