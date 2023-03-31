@@ -21,8 +21,8 @@ class sqldb(object):
         self.cursor = self.conn.cursor()
 
     def isExit(self, id) -> bool:
-        sql = 'select 1 from %s where id = "%s" limit 1;' % (
-            utils.table, id)
+        sql = 'select 1 from %s where %s = "%s" limit 1;' % (
+            utils.table, utils.field, id)
         self.cursor.execute(sql)
         result = self.cursor.fetchall()
         if len(result) == 0:
@@ -33,8 +33,8 @@ class sqldb(object):
 
     def inSert(self, value):
         try:
-            sql = 'INSERT INTO %s (id) VALUES ("%s")' % (
-                utils.table, value)
+            sql = 'INSERT INTO %s (%s) VALUES ("%s")' % (
+                utils.table, utils.field, value)
             self.cursor.execute(sql)
             self.conn.commit()
         except Exception:

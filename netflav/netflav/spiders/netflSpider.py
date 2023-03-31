@@ -2,6 +2,7 @@ import scrapy
 import json
 from netflav.items import NetflavItem
 import re
+import sys
 
 
 class NetflspiderSpider(scrapy.Spider):
@@ -11,6 +12,8 @@ class NetflspiderSpider(scrapy.Spider):
 
     # 获取视频列表页的所有视频链接
     def parse(self, response):
+        if response.text == '1':
+            raise Exception("爬虫可能被封,请换个ip")
         data = response.xpath(
             '//div[@class="video_grid_container"]/div//a[1]/@href').getall()
         for uri in data:
