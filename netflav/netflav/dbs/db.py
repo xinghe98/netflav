@@ -16,13 +16,15 @@ class sqldb(object):
         self.conn = pymysql.connect(host=self.mysql_host, user=self.mysql_user,
                                     port=self.mysql_port,
                                     password=self.mysql_password,
-                                    db=self.mysql_db,
+                                    autocommit=True,
                                     charset=self.mysql_db_charset,
                                     cursorclass=pymysql.cursors.DictCursor)
-        self.conn.cursor().execute('CREATE DATABASE IF NOT EXISTS %s;' % self.mysql_db)
+        print(self.mysql_db)
+        self.conn.cursor().execute("CREATE DATABASE IF NOT EXISTS %s;" % (self.mysql_db))
+
+        self.conn.select_db(self.mysql_db)
         self.conn.cursor().execute(
             'create table if not exists %s(id int auto_increment primary key not null, %s varchar(20));' % (utils.table, utils.field))
-        self.conn.select_db(self.mysql_db)
         self.cursor = self.conn.cursor()
 
     def isExit(self, id) -> bool:
