@@ -1,3 +1,4 @@
+from netflav.utils import utils
 # Scrapy settings for netflav project
 #
 # For simplicity, this file contains only settings considered important or
@@ -8,8 +9,8 @@
 #     https://docs.scrapy.org/en/latest/topics/spider-middleware.html
 
 BOT_NAME = "netflav"
-# LOG_LEVEL = 'WARNING'
-LOG_LEVEL = 'DEBUG'
+LOG_LEVEL = 'WARNING'
+# LOG_LEVEL = 'DEBUG'
 SPIDER_MODULES = ["netflav.spiders"]
 NEWSPIDER_MODULE = "netflav.spiders"
 
@@ -64,12 +65,10 @@ DOWNLOADER_MIDDLEWARES = {
 # See https://docs.scrapy.org/en/latest/topics/item-pipeline.html
 ITEM_PIPELINES = {
     "netflav.pipelines.netflixPipeline": 300,
-    "netflav.pipelines.MySQLPipeline": 401,
     "netflav.pipelines.netflixImagesPipeline": 502,
     "netflav.pipelines.netflVideoPipeline": 603
 }
 
-IMAGES_STORE = './content'
 MEDIA_ALLOW_REDIRECTS = True
 # Enable and configure the AutoThrottle extension (disabled by default)
 # See https://docs.scrapy.org/en/latest/topics/autothrottle.html
@@ -101,8 +100,9 @@ RETRY_TIMES = 10  # 重试次数
 CONCURRENT_REQUESTS = 16  # 并发数
 DOWNLOAD_TIMEOUT = 180  # 超时时间
 RETRY_HTTP_CODES = [500, 503, 504, 400, 403, 404, 408, 403]
-# DOWNLOAD_MAXSIZE = 0
-AUTOTHROTTLE_ENABLED = True
-AUTOTHROTTLE_START_DELAY = 5
-AUTOTHROTTLE_MAX_DELAY = 70
-AUTOTHROTTLE_TARGET_CONCURRENCY = 0.5
+IMAGES_STORE = utils.dir
+# 如果封ip 将下面注释删除
+# AUTOTHROTTLE_ENABLED = True
+# AUTOTHROTTLE_START_DELAY = 5
+# AUTOTHROTTLE_MAX_DELAY = 70
+# AUTOTHROTTLE_TARGET_CONCURRENCY = 0.5

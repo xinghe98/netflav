@@ -5,7 +5,8 @@ from netflav.downloader import download
 import os
 import time
 from netflav.utils import utils
-import pymysql
+from netflav.dbs.db import sqldb
+db = sqldb()
 
 
 class netflixPipeline(object):
@@ -17,7 +18,7 @@ class netflixPipeline(object):
     def mktimedir(self):
         foldername = str(time.strftime('%Y%m%d%H%M'))
         try:
-            os.makedirs('./content/'+foldername)
+            os.makedirs(utils.dir+'/'+foldername)
         except Exception:
             pass
         return foldername
@@ -46,10 +47,12 @@ class netflixPipeline(object):
 
 
 class netflixImagesPipeline(ImagesPipeline):
+
     def get_media_requests(self, item, info):
-        if item['download'] == 1:
+        if db.isExit(item['id']):
             yield scrapy.Request(item['cover'])
         else:
+            print("该内容已经下载过")
             return item
 
     def file_path(self, request, response=None, info=None, *, item=None):
@@ -65,40 +68,9 @@ class netflVideoPipeline(object):
 
     def process_item(self, item, spider):
         # print(item)
-        if item['download'] == 1:
-            download(item['video_url'], "./content/" +
+        if db.isExit(item['id']):
+            # if item:
+            download(item['video_url'], utils.dir + "/" +
                      item['foldername']+'/' + item['video_name']+'.mp4')
+            db.inSert(item['id'])
         return item
-
-
-class MySQLPipeline(object):
-    def __init__(self):
-        self.mysql_host = utils.host
-        self.mysql_user = utils.user
-        self.mysql_password = utils.passwd
-        self.mysql_db = utils.db
-        self.mysql_db_charset = 'utf8'
-        self.connect()
-
-    def connect(self):
-        self.conn = pymysql.connect(host=self.mysql_host, user=self.mysql_user,
-                                    password=self.mysql_password,
-                                    db=self.mysql_db, charset=self.mysql_db_charset)
-        self.cursor = self.conn.cursor()
-
-    def process_item(self, item, spider):
-        sql = 'select 1 from infoid where id = "%s" limit 1;' % (item['id'])
-        self.cursor.execute(sql)
-        result = self.cursor.fetchall()
-        if len(result) == 0:
-            sql = 'INSERT INTO infoid (id) VALUES ("%s")' % (item['id'])
-            self.cursor.execute(sql)
-            self.conn.commit()
-            item['download'] = 1
-        if len(result) != 0:
-            item['download'] = 0
-        return item
-
-    def close_spider(self, spider):
-        self.conn.close()
-        self.cursor.close()

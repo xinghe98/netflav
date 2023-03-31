@@ -1,4 +1,7 @@
 host = 'localhost'
 user = 'root'
-passwd = 'Lcg19980319!'
+passwd = '123456'
+port = 3306
 db = 'netflav'
+dir = './content'
+table = 'infoid'

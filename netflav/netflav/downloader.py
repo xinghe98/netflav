@@ -7,6 +7,7 @@ import requests
 import multitasking
 import threading
 from retry import retry
+import asyncio
 import signal
 # 导入 retry 库以方便进行下载出错重试
 signal.signal(signal.SIGINT, multitasking.killall)

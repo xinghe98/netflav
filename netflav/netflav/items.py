@@ -15,4 +15,3 @@ class NetflavItem(scrapy.Item):
     video_name = scrapy.Field()
     foldername = scrapy.Field()
     id = scrapy.Field()
-    download = scrapy.Field()
