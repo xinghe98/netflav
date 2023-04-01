@@ -53,6 +53,7 @@ SPIDER_MIDDLEWARES = {
 # Enable or disable downloader middlewares
 # See https://docs.scrapy.org/en/latest/topics/downloader-middleware.html
 DOWNLOADER_MIDDLEWARES = {
+    "netflav.middlewares.UrlFilterMiddleware": 543,
 }
 
 # Enable or disable extensions
@@ -103,6 +104,6 @@ RETRY_HTTP_CODES = [500, 503, 504, 400, 403, 404, 408, 403]
 IMAGES_STORE = utils.dir
 # 如果封ip 将下面注释删除
 AUTOTHROTTLE_ENABLED = True
-AUTOTHROTTLE_START_DELAY = 3
+AUTOTHROTTLE_START_DELAY = 5
 AUTOTHROTTLE_MAX_DELAY = 70
 AUTOTHROTTLE_TARGET_CONCURRENCY = 0.5

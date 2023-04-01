@@ -19,9 +19,7 @@ class sqldb(object):
                                     autocommit=True,
                                     charset=self.mysql_db_charset,
                                     cursorclass=pymysql.cursors.DictCursor)
-        print(self.mysql_db)
         self.conn.cursor().execute("CREATE DATABASE IF NOT EXISTS %s;" % (self.mysql_db))
-
         self.conn.select_db(self.mysql_db)
         self.conn.cursor().execute(
             'create table if not exists %s(id int auto_increment primary key not null, %s varchar(20));' % (utils.table, utils.field))
@@ -47,6 +45,14 @@ class sqldb(object):
         except Exception:
             print("数据库写入失败")
 
+    def findflag(self):
+        sql = 'SELECT MAX(id) FROM %s;' % (utils.table)
+        self.cursor.execute(sql)
+        result = self.cursor.fetchall()
+        if result[0]['MAX(id)'] is None:
+            return 0
+        print(result[0]['MAX(id)'])
+        return result[0]['MAX(id)']
         # def close_spider(self, spider):
         #     self.conn.close()
         #     self.cursor.close()
