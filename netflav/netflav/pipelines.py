@@ -52,7 +52,6 @@ class netflixPipeline(object):
             video_name = video_name[:100]
         item['video_name'] = '-{}-{}'.format(dirname, video_name)
         # self.lastid = self.lastid + 1
-        print(self.lastid)
         return item
 
 
