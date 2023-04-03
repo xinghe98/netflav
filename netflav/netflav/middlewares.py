@@ -39,20 +39,19 @@ class UrlFilterMiddleware(object):
 
 
 class ProxyMiddleware(object):
-    def __init__(self):
-        self.proxy_url = 'http://198.52.123.241:3000/get'
 
     async def process_request(self, request, spider):
         url = request.url
         if 'streamtape.to' in url:
             return None
-        request.meta['max_retry_times'] = 10
-        async with aiohttp.ClientSession() as client:
-            resp = await client.get(self.proxy_url)
-            if not resp.status == 200:
-                return
-            print(await resp.text())
-            proxy = 'https://' + await resp.text()
-            request.meta['proxy'] = proxy
-            auths = base64.b64encode(bytes('7894ab:bec5cc43', 'utf-8'))
-            request.headers['Proxy-Authorization'] = b'Basic ' + auths
+        # request.meta['max_retry_times'] = 10
+        # async with aiohttp.ClientSession() as client:
+        #     resp = await client.get(self.proxy_url)
+        #     if not resp.status == 200:
+        #         return
+        #     print(await resp.text())
+            # proxy = 'https://' + await resp.text()
+            request.meta['proxy'] = "http://customer-7894ab:bec5cc43@proxy.ipipgo.com:31212"
+            # auths = base64.b64encode(bytes('7894ab:bec5cc43', 'utf-8'))
+            # request.headers['Proxy-Authorization'] = b'Basic ' + auths
+            request.header['Connection'] = "Close"
